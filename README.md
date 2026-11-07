@@ -114,8 +114,9 @@ and the privacy switches. Only layout, type and colour differ.
 - Styles: `styles/tpl-base.css` plus `tpl-spotlight.css`, `tpl-editorial.css`, `tpl-bento.css`. Editorial and Bento
   override the colour tokens for both themes; Spotlight keeps its opening and closing dark in either theme. Colours come
   from tokens, and scroll fade-ins (`TemplateEffects`) switch themselves off for reduced motion and without JavaScript.
-- Editorial's serif (Fraunces) is loaded only on pages wearing that design. The project detail page
-  (`/{slug}/projects/{id}`) does not follow the design yet.
+- Editorial's serif (Fraunces) is loaded only on pages wearing that design.
+- The project detail page (`/{slug}/projects/{id}`) follows the page's design too (`templates/ProjectDetail.tsx`,
+  `styles/tpl-project.css`), so a visitor stays in one look.
 - `/preview?design=bento` shows the owner's draft in another design without saving; `&embed=1` drops the banner.
 
 ## CV templates
