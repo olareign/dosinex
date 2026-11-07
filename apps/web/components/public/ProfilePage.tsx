@@ -1,49 +1,24 @@
-import { ActionBar } from "./ActionBar";
-import { Contact } from "./Contact";
-import { Credentials } from "./Credentials";
-import { Experience } from "./Experience";
-import { Hero } from "./Hero";
-import { ProjectSchedule } from "./ProjectSchedule";
-import { SiteFooter } from "./SiteFooter";
-import { SiteHeader } from "./SiteHeader";
-import { Testimonials } from "./Testimonials";
-import { ThemeScope } from "@/components/theme/ThemeScope";
-import { ViewBeacon } from "./ViewBeacon";
-import { toCardData, type PageContext } from "./view-model";
+import { publicPageTemplate } from "@/content/page-templates";
+import "@/styles/tpl-base.css";
+import "@/styles/tpl-spotlight.css";
+import "@/styles/tpl-editorial.css";
+import "@/styles/tpl-bento.css";
+import { Bento } from "./templates/Bento";
+import { Editorial } from "./templates/Editorial";
+import { Spotlight } from "./templates/Spotlight";
+import type { PageContext } from "./view-model";
 
-/** The whole public profile (PRD §3.1), rendered from one site document (published or draft preview). */
+/**
+ * The whole public profile, rendered from one site document (published or draft preview) in the design the owner
+ * chose in Dashboard → Design. Every design shows the same content and behaves the same; only the look differs.
+ */
 export function ProfilePage(ctx: PageContext) {
-  const { site, basePath } = ctx;
-  return (
-    <ThemeScope className="pp" defaultTheme={site.settings.theme}>
-      <SiteHeader {...ctx} />
-      <main>
-        <Hero {...ctx} />
-        {site.projects.length > 0 && (
-          <section id="projects" className="pp-section" aria-labelledby="projects-title">
-            <div className="pp-wrap">
-              <div className="pp-section-head">
-                <div>
-                  <span className="sp-label">
-                    {site.projects.length} {site.projects.length === 1 ? "project" : "projects"}
-                  </span>
-                  <h2 id="projects-title" className="sp-heading">
-                    Projects
-                  </h2>
-                </div>
-              </div>
-              <ProjectSchedule projects={site.projects.map((p) => toCardData(site, p))} basePath={basePath} />
-            </div>
-          </section>
-        )}
-        <Experience {...ctx} />
-        <Credentials {...ctx} />
-        <Testimonials {...ctx} />
-        <Contact {...ctx} />
-      </main>
-      <SiteFooter {...ctx} />
-      <ActionBar {...ctx} />
-      {!ctx.preview && <ViewBeacon slug={ctx.slug} />}
-    </ThemeScope>
-  );
+  switch (publicPageTemplate(ctx.site.settings)) {
+    case "editorial":
+      return <Editorial {...ctx} />;
+    case "bento":
+      return <Bento {...ctx} />;
+    case "spotlight":
+      return <Spotlight {...ctx} />;
+  }
 }

@@ -5,7 +5,15 @@ import { z } from "zod";
 import { issuesToFieldErrors } from "@/content/form-spec";
 import { CollectionNameSchema } from "@/content/schemas";
 import { signOut } from "@/lib/auth";
-import { deleteItem, reorderItems, saveCvLayouts, saveProfile, saveSettings, upsertItem } from "@/lib/collections";
+import {
+  deleteItem,
+  reorderItems,
+  saveCvLayouts,
+  savePageTemplate,
+  saveProfile,
+  saveSettings,
+  upsertItem,
+} from "@/lib/collections";
 import { applyCvImport } from "@/lib/cv-import/apply";
 import { refreshProjectPreview } from "@/lib/project-preview";
 import { requireAccount } from "@/lib/session";
@@ -130,6 +138,10 @@ export async function saveSettingsAction(data: unknown): Promise<ActionResult> {
 
 export async function saveCvLayoutsAction(data: unknown): Promise<ActionResult> {
   return run((slug) => saveCvLayouts(slug, data));
+}
+
+export async function savePageTemplateAction(data: unknown): Promise<ActionResult> {
+  return run((slug) => savePageTemplate(slug, data));
 }
 
 export async function saveSetupAction(part: SetupPart, data: unknown): Promise<ActionResult> {

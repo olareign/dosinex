@@ -10,7 +10,7 @@ vi.mock("@/lib/redis", async (importOriginal) => {
 });
 vi.mock("next/cache", () => ({ unstable_cache: <T>(fn: () => Promise<T>) => fn, revalidateTag: vi.fn() }));
 
-const { deleteItem, reorderItems, saveCvLayouts, saveProfile, saveSettings, upsertItem } =
+const { deleteItem, reorderItems, saveCvLayouts, savePageTemplate, saveProfile, saveSettings, upsertItem } =
   await import("./collections");
 const { getDraft } = await import("./site");
 
@@ -288,6 +288,34 @@ describe("saveCvLayouts", () => {
     await expect(saveCvLayouts(SLUG, { cvTemplates: ["classic"], cvTemplate: "modern" })).rejects.toMatchObject({
       issues: [expect.objectContaining({ path: ["cvTemplate"] })],
     });
+  });
+});
+
+describe("savePageTemplate", () => {
+  it("stores the chosen design and leaves content and other settings alone", async () => {
+    await saveSettings(SLUG, {
+      theme: "blueprint",
+      whatsapp: "2347033435818",
+      whatsappMessage: "",
+      publicEmail: "r@example.com",
+    });
+    const before = await draft();
+    await savePageTemplate(SLUG, { pageTemplate: "editorial" });
+
+    const d = await draft();
+    expect(d.settings.pageTemplate).toBe("editorial");
+    expect(d.settings.theme).toBe("blueprint");
+    expect(d.settings.cvTemplate).toBe(before.settings.cvTemplate);
+    expect(d.profile).toEqual(before.profile);
+  });
+
+  it("starts every page on the default design", async () => {
+    expect((await draft()).settings.pageTemplate).toBe("spotlight");
+  });
+
+  it("rejects an unknown design and leaves the draft untouched", async () => {
+    await expect(savePageTemplate(SLUG, { pageTemplate: "neon" })).rejects.toMatchObject({ code: "INVALID" });
+    expect((await draft()).settings.pageTemplate).toBe("spotlight");
   });
 });
 

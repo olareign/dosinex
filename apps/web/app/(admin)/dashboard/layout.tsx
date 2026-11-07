@@ -48,6 +48,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
         ]),
     { href: "/dashboard", label: "Overview", icon: "overview", group: "Workspace" },
     { href: "/dashboard/profile", label: "Profile", icon: "profile", group: "Your page" },
+    { href: "/dashboard/design", label: "Design", icon: "design", group: "Your page" },
     ...NAV_COLLECTIONS.map((name) => ({
       href: `/dashboard/${name}`,
       label: collections[name].label,
@@ -64,6 +65,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
     ...NAV_COLLECTIONS.map((n) => [n, collections[n].label]),
     ["setup", "Setup guide"],
     ["profile", "Profile"],
+    ["design", "Design"],
     ["tailor", "Tailor to a job"],
     ["cv", "CV"],
     ["settings", "Settings"],

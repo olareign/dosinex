@@ -41,6 +41,7 @@ describe("createEmptySite", () => {
     expect(site.experiences).toEqual([]);
     expect(site.settings).toEqual({
       theme: "sheet",
+      pageTemplate: "spotlight",
       status: "draft",
       cvTemplate: "modern",
       cvTemplates: ["classic", "modern", "projects", "minimal"],

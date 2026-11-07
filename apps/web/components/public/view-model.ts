@@ -31,6 +31,13 @@ export function whatsappHref(site: Site, context?: string): string {
   return whatsappLink(site.profile.whatsapp, site.profile.whatsappMessage, context);
 }
 
+/** A project as the page designs draw it: the card data plus the short description and the featured flag. */
+export type ShowcaseProject = ProjectCardData & { summary: string; featured: boolean };
+
+export function toShowcaseData(site: Site, p: Project): ShowcaseProject {
+  return { ...toCardData(site, p), summary: p.scope.replace(/\s+/g, " ").trim(), featured: p.featured };
+}
+
 export function toCardData(site: Site, p: Project): ProjectCardData {
   const employer = employerOf(site, p)?.company ?? p.client;
   return {
