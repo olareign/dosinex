@@ -26,6 +26,7 @@ describe("publishState", () => {
     settings: {
       theme: "sheet" as const,
       status: "draft" as const,
+      pageTemplate: "spotlight" as const,
       cvTemplate: "modern" as const,
       cvTemplates: ["modern" as const],
       showInShowcase: true,
@@ -37,6 +38,7 @@ describe("publishState", () => {
     settings: {
       theme: "sheet" as const,
       status,
+      pageTemplate: "spotlight" as const,
       cvTemplate: "modern" as const,
       cvTemplates: ["modern" as const],
       showInShowcase: true,

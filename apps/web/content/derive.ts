@@ -72,6 +72,24 @@ export function heroFigures(site: Site): Figure[] {
   return out;
 }
 
+/**
+ * Up to three headline numbers for the page designs. Worded for any profession (the older hero says "Years on site"),
+ * computed from the document and left out when they would be zero.
+ */
+export function profileStats(site: Site): Figure[] {
+  const out: Figure[] = [];
+  const years = site.profile.yearsExperience;
+  if (years > 0) out.push({ figure: `${years}+`, caption: years === 1 ? "Year of experience" : "Years of experience" });
+  const projects = site.projects.length;
+  if (projects > 0) out.push({ figure: String(projects), caption: projects === 1 ? "Project" : "Projects" });
+  const states = statesWorked(site.projects).length;
+  const certs = site.certifications.length;
+  if (states > 1) out.push({ figure: String(states), caption: "States worked" });
+  else if (certs > 0) out.push({ figure: String(certs), caption: certs === 1 ? "Certification" : "Certifications" });
+  else if (states === 1) out.push({ figure: "1", caption: "State worked" });
+  return out;
+}
+
 export function projectYears(p: Pick<Project, "startYear" | "endYear" | "status">): string {
   if (p.endYear === undefined) return p.status === "ongoing" ? yearRange(p.startYear) : String(p.startYear);
   return yearRange(p.startYear, p.endYear);

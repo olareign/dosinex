@@ -6,6 +6,7 @@ import {
   heroFigures,
   initials,
   isServiceRole,
+  profileStats,
   projectYears,
   publishedDate,
   revision,
@@ -79,6 +80,33 @@ describe("title block values", () => {
     expect(initials("Rasaq Idris Olawale")).toBe("RO");
     expect(initials("Idris")).toBe("I");
     expect(stampText("B.Tech, Engineering")).toBe("B.Tech,");
+  });
+});
+
+describe("profileStats", () => {
+  it("words the numbers for any profession and computes them from the page", () => {
+    expect(profileStats(idris())).toEqual([
+      { figure: "7+", caption: "Years of experience" },
+      { figure: "9", caption: "Projects" },
+      { figure: "3", caption: "States worked" },
+    ]);
+  });
+  it("leaves out numbers that would be zero and falls back to certifications", () => {
+    const site = idris();
+    site.profile.yearsExperience = 0;
+    site.projects = site.projects.slice(0, 1);
+    site.projects[0]!.location = "Somewhere";
+    expect(profileStats(site)).toEqual([
+      { figure: "1", caption: "Project" },
+      { figure: "1", caption: "Certification" },
+    ]);
+  });
+  it("is empty for a brand-new page", () => {
+    const site = idris();
+    site.profile.yearsExperience = 0;
+    site.projects = [];
+    site.certifications = [];
+    expect(profileStats(site)).toEqual([]);
   });
 });
 

@@ -6,6 +6,7 @@ import {
   ProfileEditorInput,
   SettingsInput,
   CvLayoutsInput,
+  PageTemplateInput,
   type CollectionName,
   type Site,
   type SiteInput,
@@ -150,6 +151,14 @@ export async function saveSettings(slug: string, data: unknown, now: Date = new 
     }),
     now,
   );
+}
+
+/** Dashboard → Design. Changes only the design; the content and every other setting stay as they are. */
+export async function savePageTemplate(slug: string, data: unknown, now: Date = new Date()): Promise<void> {
+  const parsed = PageTemplateInput.safeParse(data);
+  if (!parsed.success) throw new SiteError("INVALID", "Invalid page design", parsed.error.issues);
+  const { pageTemplate } = parsed.data;
+  await mutateDraft(slug, (draft) => ({ ...draft, settings: { ...draft.settings, pageTemplate } }), now);
 }
 
 /** Settings → CV layouts. The set is stored in the usual order with no repeats; the default is checked against it. */

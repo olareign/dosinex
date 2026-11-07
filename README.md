@@ -91,6 +91,33 @@ Production deploys come from pushes to `main`. `vercel` from the CLI creates a P
 | `pnpm format` / `format:check` | Prettier                            |
 | `pnpm build`                   | Production builds (need no secrets) |
 
+## Page designs
+
+The public page (`/{slug}`) comes in three designs. The owner picks one in **Dashboard → Design** (with a live desktop and
+phone preview of their saved draft, before choosing); visitors never choose. The choice is `settings.pageTemplate` in the
+site document, so it reaches the public page on **Publish** like everything else. Pages saved before the setting existed
+get the default (Spotlight).
+
+| Design    | Look                                                                                         | Suits                                       |
+| --------- | -------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| Spotlight | Dark full-bleed opening, photo with floating chips, competency ticker, large picture tiles   | Freelancers, creators, builders             |
+| Editorial | Warm paper, serif headings, arched portrait, projects as an index, career as a story         | Job seekers, teachers, nurses, researchers  |
+| Bento     | Colour-tinted card grid; who, where, now, WhatsApp and CV are all visible in the first screen | Anyone sharing the link from a phone or chat |
+
+All three render the same content and behave the same: WhatsApp, enquiry form, CV download, view counting, theme toggle
+and the privacy switches. Only layout, type and colour differ.
+
+- `content/page-templates.ts` holds the ids and descriptions (add a design there, then in `ProfilePage.tsx`).
+- `components/public/templates/` has one file per design for the opening, plus `shared.tsx` (header, experience,
+  credentials, testimonials, contact, footer) and `ProjectShowcase.tsx` (the filter and project list, drawn per design).
+  Shared sections carry the same markup in every design; each design restyles them through `.tpl--{id}`.
+- Styles: `styles/tpl-base.css` plus `tpl-spotlight.css`, `tpl-editorial.css`, `tpl-bento.css`. Editorial and Bento
+  override the colour tokens for both themes; Spotlight keeps its opening and closing dark in either theme. Colours come
+  from tokens, and scroll fade-ins (`TemplateEffects`) switch themselves off for reduced motion and without JavaScript.
+- Editorial's serif (Fraunces) is loaded only on pages wearing that design. The project detail page
+  (`/{slug}/projects/{id}`) does not follow the design yet.
+- `/preview?design=bento` shows the owner's draft in another design without saving; `&embed=1` drops the banner.
+
 ## CV templates
 
 A page can offer its visitors up to four CV layouts. Each is the same content, drawn differently, as a PDF generated on

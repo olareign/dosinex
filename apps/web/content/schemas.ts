@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { CV_TEMPLATE_IDS, DEFAULT_CV_TEMPLATE } from "./cv-templates";
+import { DEFAULT_PAGE_TEMPLATE, PAGE_TEMPLATE_IDS } from "./page-templates";
 
 // Plain-language messages for the CMS. This module is imported by both client forms and
 // server validation, so both show the same wording. Unhandled cases fall back to Zod's defaults.
@@ -287,6 +288,8 @@ export type Profile = z.infer<typeof Profile>;
 
 export const SiteSettings = z.object({
   theme: z.enum(["sheet", "blueprint"]).default("sheet"),
+  /** The design the public page wears (Dashboard → Design). Pages saved before this existed get the default. */
+  pageTemplate: z.enum(PAGE_TEMPLATE_IDS).default(DEFAULT_PAGE_TEMPLATE),
   status: z.enum(["draft", "published", "suspended"]).default("draft"),
   /** The CV layouts the page offers for download (the owner's choice), and which one comes first. */
   cvTemplates: z
@@ -474,6 +477,12 @@ export const CvLayoutsInput = z
     message: "Choose a default from the layouts you offer",
   });
 export type CvLayoutsInput = z.input<typeof CvLayoutsInput>;
+
+/** Dashboard → Design: which of the page designs the public page wears. */
+export const PageTemplateInput = z.object({
+  pageTemplate: z.enum(PAGE_TEMPLATE_IDS, "Choose one of the designs"),
+});
+export type PageTemplateInput = z.input<typeof PageTemplateInput>;
 
 /** Settings screen: contact channels and theme. Slug changes are not supported yet. */
 export const SettingsInput = z.object({
